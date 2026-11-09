@@ -23,7 +23,7 @@ header{flex:none;height:161px;background:#fff;padding:10px 20px 0;border:0;displ
 .year-select{font:600 24px/1.4 "Noto Serif CJK JP",serif;color:#3c3632;padding:4px 27px 5px 11px;letter-spacing:.02em;text-align:center}
 .year-picker:after{content:"";position:absolute;right:9px;top:39%;width:8px;height:8px;border-right:1.7px solid #8e7564;border-bottom:1.7px solid #8e7564;transform:rotate(45deg);pointer-events:none}
 .mode-picker{position:absolute;right:0;top:50%;transform:translateY(-50%)}
-.mode-select{background:#f9f4f2;border:1px solid #efe5df;color:var(--deep-red);font-size:11px;font-weight:600;letter-spacing:.03em;min-width:75px;max-width:93px;height:31px;padding:0 19px 0 9px;text-align:center}
+.mode-select{background:#f9f4f2;border:1px solid #efe5df;color:var(--deep-red);font-size:12px;font-weight:600;letter-spacing:.03em;min-width:75px;max-width:93px;height:31px;padding:0 19px 0 9px;text-align:center}
 .mode-picker:after{content:"";position:absolute;right:9px;top:37%;width:5px;height:5px;border-right:1.4px solid var(--deep-red);border-bottom:1.4px solid var(--deep-red);transform:rotate(45deg);pointer-events:none}
 .week{height:53px;flex:none;display:grid;grid-template-columns:54px 1fr 54px;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);background:#fff}
 .arrow{height:48px;width:50px;border:0;background:transparent;color:#9b8173;display:flex;align-items:center;justify-content:center}
@@ -34,23 +34,24 @@ header{flex:none;height:161px;background:#fff;padding:10px 20px 0;border:0;displ
 .arrow[data-prev]:before{transform:rotate(135deg)}
 .arrow[data-next]:before{transform:rotate(-45deg)}
 .today{justify-self:center;min-width:90px;height:31px;padding:3px 14px 5px;border:1px solid #eee3d9;background:var(--wash);font-size:12px;letter-spacing:.11em;color:var(--deep-red)}
-.calendar{flex:1;min-height:0;display:grid;grid-template-rows:repeat(7,minmax(0,1fr));touch-action:pan-y;background:#fff}
-.day{min-height:0;display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:22px;padding:7px 15px 7px 17px;background:#fff;border-bottom:1px solid var(--line)}
+.calendar{flex:1;min-height:0;display:grid;grid-template-rows:repeat(7,minmax(max-content,1fr));overflow-y:auto;touch-action:pan-y;background:#fff}
+.day{display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:22px;padding:7px 15px 7px 17px;background:#fff;border-bottom:1px solid var(--line)}
 .day:last-child{border-bottom:0}
 .day.current{background:#fff}
 .date{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums;padding-left:2px}
 .date strong{font:600 18px/1.25 "Noto Serif CJK JP",serif;color:#4b4039}
-.date span{font-size:10px;line-height:1.5;color:#91867f}
-.date em{margin-top:1px;font-size:9px;color:var(--red);font-style:normal;letter-spacing:.06em}
+.date span{font-size:12px;line-height:1.5;color:#91867f}
+.date em{margin-top:1px;font-size:12px;color:var(--red);font-style:normal;letter-spacing:.06em}
 .day.current .date strong{color:var(--deep-red)}
 .day.current .date:before{content:"";position:absolute;left:-7px;top:30%;height:40%;width:2px;background:var(--gold)}
-.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:2px 8px;min-width:0;min-height:0;align-content:center;padding:4px 0}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(36px,auto);gap:2px 8px;min-width:0;align-content:center;padding:4px 0}
 .entry{display:flex;align-items:center;min-width:0;min-height:0;gap:5px;padding:1px 0;border:0;background:transparent;text-align:left;color:#514b47}
 .entry:hover,.entry:focus-visible{color:var(--red)}
 .icon{display:inline-flex;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:12px;line-height:1;color:var(--red)}
-.category-icon img{display:block;width:20px;height:20px;object-fit:contain}
-.snippet{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.4px;line-height:1.5;font-weight:400}
-.empty{align-self:center;grid-column:1/-1;color:#a59b91;font-size:11px}
+.category-icon{width:36px;height:36px}
+.category-icon img{display:block;width:36px;height:36px;object-fit:contain}
+.snippet{min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:12px;line-height:1.5;font-weight:400}
+.empty{align-self:center;grid-column:1/-1;color:#a59b91;font-size:12px}
 .overlay{position:absolute;inset:0;z-index:10}
 .overlay[hidden]{display:none}
 .scrim{position:absolute;inset:0;background:rgba(31,24,21,.45);border:0;width:100%;height:100%;padding:0}
@@ -63,10 +64,10 @@ header{flex:none;height:161px;background:#fff;padding:10px 20px 0;border:0;displ
 .detail-text{margin:0;font-size:15px;line-height:1.9;overflow-wrap:anywhere;color:#3e3732}
 .speaker{display:flex;align-items:flex-end;flex-direction:column;gap:1px;padding:16px 7px 0}
 .speaker img{width:75px;height:96px;object-fit:contain}
-.speaker span{font-size:10px;color:#fff}
+.speaker span{font-size:12px;color:#fff}
 button:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-@media(max-width:420px){.phone{width:100%;height:100svh;min-height:510px}header{height:151px;padding-top:6px}.logo-area{height:90px}.logo-area img{height:79px}.meta{height:55px}.day{column-gap:20px;padding-left:15px;padding-right:14px}.snippet{font-size:11px}}
-@media(max-height:740px){header{height:129px;padding-top:2px}.logo-area{height:72px}.logo-area img{height:67px}.meta{height:55px}.week{height:45px}.arrow{height:42px}.day{padding-top:3px;padding-bottom:3px}.date strong{font-size:16px}.date span{font-size:9px}.entry{padding:0}.snippet{font-size:10.5px}.items{gap:0 6px}.float{top:18%}}
+@media(max-width:420px){.phone{width:100%;height:100svh;min-height:510px}header{height:151px;padding-top:6px}.logo-area{height:90px}.logo-area img{height:79px}.meta{height:55px}.day{column-gap:20px;padding-left:15px;padding-right:14px}}
+@media(max-height:740px){header{height:129px;padding-top:2px}.logo-area{height:72px}.logo-area img{height:67px}.meta{height:55px}.week{height:45px}.arrow{height:42px}.day{padding-top:3px;padding-bottom:3px}.date strong{font-size:16px}.entry{padding:0}.items{gap:0 6px}.float{top:18%}}
 </style>
 </head>
 <body>
@@ -244,8 +245,8 @@ function entry(item){
     const img=document.createElement('img');
     img.src=item.icon;
     img.alt='';
-    img.width=20;
-    img.height=20;
+    img.width=36;
+    img.height=36;
     img.decoding='async';
     icon.append(img);
   }else{
@@ -253,7 +254,7 @@ function entry(item){
   }
   const text=document.createElement('span');
   text.className='snippet';
-  text.textContent=item.label||Array.from(item.text).slice(0,10).join('')+'…';
+  text.textContent=Array.from(item.label||item.text).slice(0,10).join('');
   b.append(icon,text);
   b.addEventListener('click',()=>open(item,b));
   return b;
