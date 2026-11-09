@@ -1,0 +1,351 @@
+﻿
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>まねたまの運命開花暦 — 画面案</title>
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:light;--paper:#fff;--ink:#302b29;--muted:#81756c;--line:#e9e4df;--red:#a32c35;--deep-red:#7d2530;--gold:#b79664;--wash:#f9f6f1}
+html{font-family:"Noto Sans CJK JP","Yu Gothic",Meiryo,sans-serif}
+body{margin:0;background:#fff;color:var(--ink);font:14px/1.5 "Noto Sans CJK JP","Yu Gothic",Meiryo,sans-serif;-webkit-font-smoothing:antialiased}
+button,select{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.phone{position:relative;isolation:isolate;display:flex;flex-direction:column;width:390px;max-width:100%;height:min(820px,100svh);min-height:530px;margin:0 auto;background:var(--paper);border:0;border-radius:0;overflow:hidden;box-shadow:none}
+header{flex:none;height:161px;background:#fff;padding:10px 20px 0;border:0;display:flex;flex-direction:column}
+.logo-area{display:flex;justify-content:center;align-items:center;height:93px;min-height:0;position:relative}
+.logo-area img{display:block;width:326px;max-width:100%;height:83px;object-fit:contain}
+.logo-fallback{display:none;font:600 23px/1.4 "Noto Serif CJK JP",serif;color:var(--deep-red);letter-spacing:.1em;text-align:center}
+.logo-area img[hidden]+.logo-fallback{display:block}
+.meta{height:58px;flex:none;position:relative;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+.year-picker,.mode-picker{display:inline-flex;position:relative;align-items:center}
+.year-select,.mode-select{-webkit-appearance:none;appearance:none;border:0;background:transparent;outline-offset:3px;cursor:pointer}
+.year-select{font:600 24px/1.4 "Noto Serif CJK JP",serif;color:#3c3632;padding:4px 27px 5px 11px;letter-spacing:.02em;text-align:center}
+.year-picker:after{content:"";position:absolute;right:9px;top:39%;width:8px;height:8px;border-right:1.7px solid #8e7564;border-bottom:1.7px solid #8e7564;transform:rotate(45deg);pointer-events:none}
+.mode-picker{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+.mode-select{background:#f9f4f2;border:1px solid #efe5df;color:var(--deep-red);font-size:11px;font-weight:600;letter-spacing:.03em;min-width:75px;max-width:93px;height:31px;padding:0 19px 0 9px;text-align:center}
+.mode-picker:after{content:"";position:absolute;right:9px;top:37%;width:5px;height:5px;border-right:1.4px solid var(--deep-red);border-bottom:1.4px solid var(--deep-red);transform:rotate(45deg);pointer-events:none}
+.week{height:53px;flex:none;display:grid;grid-template-columns:54px 1fr 54px;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);background:#fff}
+.arrow{height:48px;width:50px;border:0;background:transparent;color:#9b8173;display:flex;align-items:center;justify-content:center}
+.arrow:first-child{justify-self:start}
+.arrow:last-child{justify-self:end}
+.arrow:hover{color:var(--deep-red)}
+.arrow:before{content:"";display:block;width:14px;height:14px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor}
+.arrow[data-prev]:before{transform:rotate(135deg)}
+.arrow[data-next]:before{transform:rotate(-45deg)}
+.today{justify-self:center;min-width:90px;height:31px;padding:3px 14px 5px;border:1px solid #eee3d9;background:var(--wash);font-size:12px;letter-spacing:.11em;color:var(--deep-red)}
+.calendar{flex:1;min-height:0;display:grid;grid-template-rows:repeat(7,minmax(0,1fr));touch-action:pan-y;background:#fff}
+.day{min-height:0;display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:22px;padding:7px 15px 7px 17px;background:#fff;border-bottom:1px solid var(--line)}
+.day:last-child{border-bottom:0}
+.day.current{background:#fff}
+.date{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums;padding-left:2px}
+.date strong{font:600 18px/1.25 "Noto Serif CJK JP",serif;color:#4b4039}
+.date span{font-size:10px;line-height:1.5;color:#91867f}
+.date em{margin-top:1px;font-size:9px;color:var(--red);font-style:normal;letter-spacing:.06em}
+.day.current .date strong{color:var(--deep-red)}
+.day.current .date:before{content:"";position:absolute;left:-7px;top:30%;height:40%;width:2px;background:var(--gold)}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:2px 8px;min-width:0;min-height:0;align-content:center;padding:4px 0}
+.entry{display:flex;align-items:center;min-width:0;min-height:0;gap:5px;padding:1px 0;border:0;background:transparent;text-align:left;color:#514b47}
+.entry:hover,.entry:focus-visible{color:var(--red)}
+.icon{display:inline-flex;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:12px;line-height:1;color:var(--red)}
+.category-icon img{display:block;width:20px;height:20px;object-fit:contain}
+.snippet{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.4px;line-height:1.5;font-weight:400}
+.empty{align-self:center;grid-column:1/-1;color:#a59b91;font-size:11px}
+.overlay{position:absolute;inset:0;z-index:10}
+.overlay[hidden]{display:none}
+.scrim{position:absolute;inset:0;background:rgba(31,24,21,.45);border:0;width:100%;height:100%;padding:0}
+.float{position:absolute;top:24%;left:20px;right:20px;filter:drop-shadow(0 14px 23px rgba(24,16,12,.16))}
+.bubble{position:relative;background:#fff;border-top:3px solid var(--red);padding:20px 21px 24px}
+.bubble:after{content:"";position:absolute;right:32px;bottom:-11px;height:22px;width:22px;background:#fff;clip-path:polygon(0 0,100% 0,100% 100%)}
+.detail-head{display:flex;align-items:center;gap:8px;margin-bottom:13px;color:var(--deep-red);font-size:12px;font-weight:600;letter-spacing:.06em}
+.detail-head span{flex:1}
+.close{border:0;background:transparent;width:28px;height:28px;font-size:24px;line-height:1}
+.detail-text{margin:0;font-size:15px;line-height:1.9;overflow-wrap:anywhere;color:#3e3732}
+.speaker{display:flex;align-items:flex-end;flex-direction:column;gap:1px;padding:16px 7px 0}
+.speaker img{width:75px;height:96px;object-fit:contain}
+.speaker span{font-size:10px;color:#fff}
+button:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+@media(max-width:420px){.phone{width:100%;height:100svh;min-height:510px}header{height:151px;padding-top:6px}.logo-area{height:90px}.logo-area img{height:79px}.meta{height:55px}.day{column-gap:20px;padding-left:15px;padding-right:14px}.snippet{font-size:11px}}
+@media(max-height:740px){header{height:129px;padding-top:2px}.logo-area{height:72px}.logo-area img{height:67px}.meta{height:55px}.week{height:45px}.arrow{height:42px}.day{padding-top:3px;padding-bottom:3px}.date strong{font-size:16px}.date span{font-size:9px}.entry{padding:0}.snippet{font-size:10.5px}.items{gap:0 6px}.float{top:18%}}
+</style>
+</head>
+<body>
+<main class="phone" aria-label="まねたまの運命開花暦">
+<header>
+  <div class="logo-area">
+    <img src="./images/logo.png" alt="まねたまの運命開花暦" onerror="this.hidden=true">
+    <span class="logo-fallback">まねたまの運命開花暦</span>
+  </div>
+  <div class="meta">
+    <label class="year-picker">
+      <select class="year-select" aria-label="表示年">
+        <option value="2026">2026年</option>
+        <option value="2027">2027年</option>
+        <option value="2028">2028年</option>
+      </select>
+    </label>
+    <label class="mode-picker">
+      <select class="mode-select" aria-label="利用プラン">
+        <option value="無料">無料版</option>
+        <option value="お試し">お試し版</option>
+        <option value="有料" selected>有料</option>
+      </select>
+    </label>
+  </div>
+</header>
+<nav class="week" aria-label="週の移動">
+  <button class="arrow" data-prev aria-label="前の7日間"></button>
+  <button class="today" data-today>今日</button>
+  <button class="arrow" data-next aria-label="次の7日間"></button>
+</nav>
+<section class="calendar" aria-label="7日分のカレンダー"></section>
+<div class="overlay" hidden>
+  <button class="scrim" aria-label="全文表示を閉じる"></button>
+  <section class="float" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="bubble">
+      <div class="detail-head">
+        <span id="detail-title"></span>
+        <button class="close" aria-label="閉じる">×</button>
+      </div>
+      <p class="detail-text"></p>
+    </div>
+    <div class="speaker">
+      <img src="./images/icon.png" alt="まねたま" onerror="this.hidden=true">
+      <span>まねたま</span>
+    </div>
+  </section>
+</div>
+</main>
+<script>
+(() => {
+'use strict';
+const data=[
+{"日付":"2026-11-02","イベント":"【学び運】庚辰 今日の学びは、まっすぐな励ましとは違う、少し癖のある養い方なんだ。気になった話は鵜呑みにせず、メモに残して寝かせておこうね。"},
+{"日付":"2026-11-02","イベント":"【仕事運】庚辰 ひとつ重たい役目が来ても、無理に押し込めなくて大丈夫。今のあなたなら抱えたまま進めるから、後回しにしていた案件に手をつけてみよう。"},
+{"日付":"2026-11-03","イベント":"【学び運】辛巳 知識が増えるほど、つい得意げになりやすい日。人に教えたくなったらひと呼吸おいて、聞き役にまわるくらいがちょうどいいよ。"},
+{"日付":"2026-11-03","イベント":"【金運】辛巳 お金の入りを、素直に喜んで迎え入れられる時期だよ。家計の見直しや副業のアイデア出しなど、稼ぐ側の準備に踏み出してみて。"},
+{"日付":"2026-11-03","イベント":"【恋愛運】辛巳 気持ちに余裕がある今は、相手を支える役がよく似合う日。話を聞いたり小さな頼みごとを引き受けたり、こちらから声をかけていこう。"},
+{"日付":"2026-11-04","イベント":"【人間関係運】壬午 肩を並べる仲間の勢いが増して、場の主導権を取り合いやすいよ。張り合わずに一歩引いて、仕切りは相手にゆだねてみようか。"},
+{"日付":"2026-11-04","イベント":"【金運】壬午 お金のことは、欠けも衝突もない状態こそ美しい。割り勘や立て替えはその場ですっきり清算して、次の使い道を前向きに決めよう。"},
+{"日付":"2026-11-04","イベント":"【恋愛運】壬午 ご縁は、あなたが生み出す楽しさから芽生えるもの。好きな音楽や得意料理の話題を自分から振って、会話のきっかけをつくってみてね。"},
+{"日付":"2026-11-05","イベント":"【人間関係運】癸未 競り合う相手ほど熱を帯びやすい日。言い返したくなっても今日は勝ち負けを脇に置いて、少し距離をとって過ごすのが賢いやり方だよ。"},
+{"日付":"2026-11-05","イベント":"【仕事運】癸未 いまは立場を守り立てる余力があるよ。頼まれた仕事にきちんと応えて、上の人の段取りを先回りで支えてみるといいね。"},
+{"日付":"2026-11-06","イベント":"【才能運】甲申 才能が、実りと結ばれることを喜んでいる日。作りかけの作品や企画書を仕上げて、誰かに見せるところまで進めちゃおう。"},
+{"日付":"2026-11-06","イベント":"【学び運】甲申 学びが、はやる才気の手綱になってくれる日。勢いで決める前に基本書を開き直して、やり方をひとつずつ確かめる時間をとろう。"},
+{"日付":"2026-11-07","イベント":"【才能運】乙酉 尖った感性は、外へ出してこそ荒さが抜けていくんだ。思いついたことは遠慮せずに発信して、反応をもらいながら磨いていけばいい。"},
+{"日付":"2026-11-07","イベント":"【学び運】乙酉 学びは心の寄りどころになるけれど、今日は詰め込みすぎないのがコツ。新しい講座に飛びつくより、手持ちのノートを見返す程度にしておいて。"},
+{"日付":"2026-11-08","イベント":"【金運】丙戌 今はお金そのものを育てていける時だよ。眠っている口座や積み立ての設定を洗い出して、増やすための一手を今日のうちに打とう。"},
+{"日付":"2026-11-08","イベント":"【恋愛運】丙戌 ご縁が巡ってきたとき、それを楽しめる心の強さがあるんだ。誘われた集まりには顔を出して、初対面の人にも名乗ってみようよ。"},
+{"日付":"2026-11-08","イベント":"【仕事運】丙戌 ずしりとくる責任を一つ背負っても、はね返さずに担いでいける日。受けるか迷っていた仕事があるなら、思い切って手を挙げてみては。"},
+{"日付":"2026-11-09","イベント":"【金運】丁亥 お金は、得意なことを元手にして実らせるのが今の筋道。趣味の腕前を小さな仕事に変えられないか、具体的に書き出して動き出そう。"},
+{"日付":"2026-11-09","イベント":"【恋愛運】丁亥 恋は、壊さずぶつからずに育てる形が美しいもの。相手のペースを尊重しつつ、次に会う約束だけはあなたから取りつけてね。"},
+{"日付":"2026-11-09","イベント":"【人間関係運】丁亥 仲間の力は、外にいる誰かだけでなく、自分の内側の底力としても宿っている。人を頼りすぎず、ひとりで片づけられることは黙々と済ませる日にしよう。"},
+{"日付":"2026-11-10","イベント":"【仕事運】戊子 荒っぽい課題がひとつ飛び込んできても、押さえつけずに受けて立てる力がある。厄介な仕事こそ朝いちばんに取りかかろう。"},
+{"日付":"2026-11-10","イベント":"【人間関係運】戊子 味方の後押しは心強いけれど、今日はほどほどが肝心。人が増えすぎると自分の取り分が細ることもあるから、誘いを広げすぎないでね。"},
+{"日付":"2026-11-11","イベント":"【仕事運】己丑 任された持ち場を、自分の力で押し上げられる時。会議では前のほうに座って意見を伝え、チームの方針づくりにしっかり関わってごらん。"},
+{"日付":"2026-11-12","イベント":"【学び運】庚寅 似た者同士で教え合う学びは心地いいぶん、偏りも生まれやすいよ。今日は新しく取り入れるのを控えて、覚えたことの抜けを点検しよう。"},
+{"日付":"2026-11-12","イベント":"【才能運】庚寅 気力が満ちた今は、才能を実りのために使っていける。描いたもの、書いたものに値をつけて出品するなど、成果に変える一歩を踏んで。"},
+{"日付":"2026-11-13","イベント":"【学び運】辛卯 学びを足すほど、気持ちが大きくなりがちなとき。資格の勉強は先へ進むより、間違えた問題の解き直しに時間を使ってみるのがおすすめ。"},
+{"日付":"2026-11-13","イベント":"【才能運】辛卯 鋭いひらめきが、手応えのある成果を欲しがっている日。ためていた構想をSNSや社内で発表して、周りの声という実りを受け取りに行ってね。"},
+{"日付":"2026-11-14","イベント":"【人間関係運】壬辰 頼れる仲間は、数がそろわなくてもかまわない。声がかかる場が重なったら全部に応じようとせず、本当に話したい人だけに絞って会えば十分だよ。"},
+{"日付":"2026-11-14","イベント":"【仕事運】壬辰 今は肩書きや役割を、もう一段引き上げる力があるとき。昇進や異動の希望があるなら、上司との面談で自分の言葉にして伝えるといい。"},
+{"日付":"2026-11-15","イベント":"【人間関係運】癸巳 競う気持ちの強い人のそばでは、こちらの実入りが目減りしがち。お金の貸し借りや共同出費の話は、今日は返事を急がずに保留で。"},
+{"日付":"2026-11-15","イベント":"【金運】癸巳 収入の芽を受け止めて大きくできる勢いが、今日のあなたには備わっている。前から興味のあった投資の勉強会や、条件のいい仕事の打診には軽やかに乗ってみて。"},
+{"日付":"2026-11-15","イベント":"【恋愛運】癸巳 懐の深さを生かして、相手を包むように支えられる日。忙しそうな人には差し入れを、落ち込んでいる人には短いメッセージを届けよう。"},
+{"日付":"2026-11-16","イベント":"【才能運】甲午 持ち前の才能を、誰かの暮らしを助ける実りに振り向けていこう。手をつけずにいた作品づくりや発信を再開して、喜んでほしい相手を思い浮かべながら仕上げてね。"},
+{"日付":"2026-11-16","イベント":"【金運】甲午 今日の稼ぎどころは、表現する力を借りたその先にあるよ。ブログや手作り品の販売など、自分の得意を収入の入口に変えていこう。"},
+{"日付":"2026-11-16","イベント":"【恋愛運】甲午 好意を向けられたら、ためらわず喜んで受けとめられる強さがある日。気になる人からの誘いには快く応じて、一緒の時間を味わおう。"},
+{"日付":"2026-11-17","イベント":"【才能運】乙未 荒削りな才気は、内にしまうより少しずつ漏らしていくほうが角がとれる。思ったことを短い文や落書きにして、気軽に誰かと分かち合おう。"},
+{"日付":"2026-11-17","イベント":"【仕事運】乙未 責任ある立場を、根元からしっかり支えていける頃合い。後輩の相談に乗ったり、上司の手が回らない仕事を拾ったりして、組織の柱になっていこう。"},
+{"日付":"2026-11-18","イベント":"【金運】丙申 手にした収入をさらに太らせる手助けができる日。お金の行き先を一覧にして、将来につながる支出へ振り分けよう。"},
+{"日付":"2026-11-18","イベント":"【恋愛運】丙申 恋の始まりは、あなたの遊び心を借りてこそ生まれる。ちょっとした冗談やささやかな贈り物で、意中の人の心をノックしてみて。"},
+{"日付":"2026-11-18","イベント":"【学び運】丙申 今日入ってくる知識は、身内びいきに似た、片寄りのある養分だよ。一つの情報源だけで判断せず、別の意見と見比べるまで結論は持ち越そう。"},
+{"日付":"2026-11-19","イベント":"【金運】丁酉 家計にひずみや摩擦がないことが、何よりの美しさになる日。滞っている支払いや手続きを手早く終わらせて、新しい稼ぎ口探しに乗り出そう。"},
+{"日付":"2026-11-19","イベント":"【恋愛運】丁酉 そばにいる大切な人を、引き立てて伸ばしてあげられる日。相手のいいところを一つ見つけて言葉にし、照れずに伝えよう。"},
+{"日付":"2026-11-19","イベント":"【学び運】丁酉 学んできたことは、いざというときの後ろ盾として身を守ってくれる。今日は付け足すより、これまでの知識を棚卸しして並べ直そう。"},
+{"日付":"2026-11-20","イベント":"【仕事運】戊戌 職場での立ち位置を、自分の手で力強く支え上げられる日。リーダー役や取りまとめを頼まれたら、迷わず請け負って場を動かそう。"},
+{"日付":"2026-11-21","イベント":"【仕事運】己亥 今の勤め先での役回りを、もっと厚く支えていける日。提案書や報告書をいつもより丁寧に練り上げて、上の人へ先に差し出そう。"},
+{"日付":"2026-11-21","イベント":"【人間関係運】己亥 近しい人とのあいだで分け前がぶつかりやすいけれど、ほどく鍵は立場と責任の整理。共同作業は誰が何を担うかを明らかにして、線引きを穏やかに整えておこう。"},
+{"日付":"2026-11-22","イベント":"【学び運】庚子 学びは、羽を休められる止まり木のようなもの。今日は新たな申し込みは見送って、本棚を眺めながら次の一冊をじっくり選ぶ時間にあてよう。"},
+{"日付":"2026-11-22","イベント":"【人間関係運】庚子 負けん気の強い人ほど、今日は語気が強まる傾向にあるよ。言い合いになりそうなら話題を変えて、深追いせずにその場をやり過ごそう。"},
+{"日付":"2026-11-23","イベント":"【学び運】辛丑 学びには、はみ出しやすい才気をなだめる働きがある。思いつきで動きたくなったら、先人の書いた手引きを一章だけ読んでから考えよう。"},
+{"日付":"2026-11-23","イベント":"【仕事運】辛丑 預かっているポジションを、自ら支えて固めていける日。頼まれる前に動いて、まだ担い手のいない課題を受け持とう。"},
+{"日付":"2026-11-24","イベント":"【人間関係運】壬寅 同輩からの助けは、ちょっと手を添えてくれる範囲にとどまる日。大事な決めごとは人任せにせず、自分の考えを先に紙にまとめてね。"},
+{"日付":"2026-11-24","イベント":"【才能運】壬寅 伸びやかな才能が、目に見える成果に変わることを喜ぶ日。温めていた企画を一枚の資料に落とし込んで、提案のテーブルへ持っていこう。"},
+{"日付":"2026-11-25","イベント":"【人間関係運】癸卯 仲間うちの付き合いは、表に出たお金にも隠れた蓄えにも同じように響いてくるよ。おごりや飲み会への参加は控えめにして、手元を固く守る日に。"},
+{"日付":"2026-11-25","イベント":"【才能運】癸卯 冴えたセンスほど、手に取れる実りを前にすると弾んでくるよ。応募作を締め切りに間に合わせるなど、ひとつ区切りをつけて世に出してみて。"},
+{"日付":"2026-11-26","イベント":"【才能運】甲辰 身につけた技を、実のある形で役立てていける日。料理や手仕事を家族や友人にふるまって、腕試しの場にしてみるのも楽しいよ。"},
+{"日付":"2026-11-26","イベント":"【仕事運】甲辰 厳しめの宿題が一つ紛れていても、あえて封じ込めずに付き合っていける日。難しい交渉や初めての業務に、先陣を切って挑もう。"},
+{"日付":"2026-11-27","イベント":"【才能運】乙巳 あふれる言葉は、稼ぎにつながる場で使いながら、荒い部分を発散していける日。告知文やプレゼンで、本音をひとさじ混ぜてみて。"},
+{"日付":"2026-11-27","イベント":"【金運】乙巳 今は収入を盛り立てる側に立てる強さがあるよ。価格の改定や新しい販路の相談など、売り上げを増やす話を先に切り出そう。"},
+{"日付":"2026-11-27","イベント":"【恋愛運】乙巳 創る力を借りて、ご縁を実らせていける日。手紙や写真、手料理など、あなたらしい表し方で好意を形にして渡そう。"},
+{"日付":"2026-11-28","イベント":"【金運】丙午 初夏の川が日差しと静かに結ぶように、お金とも肩ひじ張らずに手を組める日。訪れる実りを喜んで抱えて、棚上げしていた収入の件を前に進めよう。"},
+{"日付":"2026-11-28","イベント":"【恋愛運】丙午 ひびも言い争いもない関係こそ、ふたりがいちばん映える形。相手と過ごす時間を進んで持ちかけて、和やかな一日を一緒につくってね。"},
+{"日付":"2026-11-29","イベント":"【金運】丁未 お金を生む力は、発想の中にこそあるよ。思いついた小さな商いの種を書き留めて、一つだけでも試しに動いてみない？"},
+{"日付":"2026-11-29","イベント":"【恋愛運】丁未 人との巡り合わせを、晴れやかに喜べる力がそろっている日。友人の紹介や趣味の集まりにも足を運んで、新しい顔ぶれとの会話を楽しもう。"},
+{"日付":"2026-11-29","イベント":"【仕事運】丁未 担っている職責を、ゆとりをもって支えきれる日。上司やお客さんの期待より半歩先まで進めて、仕事ぶりで信頼を重ねていこう。"},
+{"日付":"2026-11-30","イベント":"【仕事運】戊申 強めのプレッシャーが一つかかっても、打ち消そうとせずにそのまま持っていられる日。大きな商談や発表の場に、堂々と出ていこう。"},
+{"日付":"2026-11-30","イベント":"【学び運】戊申 学ぶ時間が、のしかかる重圧のとげを和らげてくれる日。忙しさに飲まれそうなときこそ手を止めて、先輩の知恵や手順書に落ち着いて目を通そう。"},
+{"日付":"2026-12-01","イベント":"【仕事運】己酉 月の始まりは、与えられた持ち分をあなたの力で底上げしていける頃。今月の目標を上司と共有して、元気よく走り出そう。"},
+{"日付":"2026-12-01","イベント":"【学び運】己酉 学びを重ねるほど、プライドまで背伸びしてしまいそうな日。新しい知識を誇るより、教わる側に戻って質問をひとつ投げかけてみるのが今日の整え方。"}
+];
+const anchor=new Date(2026,10,10,12);
+const weekdays=['日','月','火','水','木','金','土'];
+const icons={
+  '学び運':'./images/timeline_icon_05.png',
+  '仕事運':'./images/timeline_icon_01.png',
+  '金運':'./images/timeline_icon_06.png',
+  '恋愛運':'./images/timeline_icon_02.png',
+  '人間関係運':'./images/timeline_icon_03.png',
+  '才能運':'./images/timeline_icon_04.png'
+};
+const forecasts=data.map((row,i)=>{
+  const m=row['イベント'].match(/^【([^】]+)】\s*([^\s]+)\s+([\s\S]+)$/);
+  return{
+    id:'f'+i,
+    date:row['日付'],
+    kind:m?m[1]:'運勢',
+    text:m?m[3]:row['イベント'],
+    icon:m?icons[m[1]]:''
+  };
+});
+const events=[
+{id:'e0',date:'2026-11-03',kind:'イベント（仮配置）',icon:'❀',label:'縁授祭のご案内',text:'縁授祭で、まねたまとのご縁を深めてみない？ あなたとまねたまの時間を、手元に残すアイテムも用意しているよ。'},
+{id:'e1',date:'2026-11-07',kind:'イベント（仮配置）',icon:'▧',label:'託宣壁紙をつくろう',text:'まねたまとの会話から生まれた言葉を、託宣壁紙にして残してみよう。いつものスマホに、まねたまの言葉をそっと添えてね。'}
+];
+const phone=document.querySelector('.phone');
+const calendar=document.querySelector('.calendar');
+const overlay=document.querySelector('.overlay');
+let mode='有料',week=0,opener=null;
+const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const short=d=>(d.getMonth()+1)+'/'+d.getDate();
+const plus=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r;};
+function close(){
+  overlay.hidden=true;
+  if(opener&&opener.isConnected)opener.focus();
+}
+function open(item,button){
+  opener=button;
+  const d=new Date(item.date+'T12:00:00');
+  document.querySelector('#detail-title').textContent=short(d)+'（'+weekdays[d.getDay()]+'） '+item.kind;
+  document.querySelector('.detail-text').textContent=item.text;
+  overlay.hidden=false;
+  document.querySelector('.close').focus();
+}
+function entry(item){
+  const b=document.createElement('button');
+  b.className='entry';
+  b.type='button';
+  b.setAttribute('aria-label',item.kind+'：'+(item.label||item.text)+'。全文を表示');
+  const icon=document.createElement('span');
+  icon.className='icon'+(item.id.startsWith('f')?' category-icon':'');
+  icon.setAttribute('aria-hidden','true');
+  if(item.id.startsWith('f')&&item.icon){
+    const img=document.createElement('img');
+    img.src=item.icon;
+    img.alt='';
+    img.width=20;
+    img.height=20;
+    img.decoding='async';
+    icon.append(img);
+  }else{
+    icon.textContent=item.icon||'✦';
+  }
+  const text=document.createElement('span');
+  text.className='snippet';
+  text.textContent=item.label||Array.from(item.text).slice(0,10).join('')+'…';
+  b.append(icon,text);
+  b.addEventListener('click',()=>open(item,b));
+  return b;
+}
+function render(){
+  close();
+  const start=plus(anchor,week*7);
+  document.querySelector('.year-select').value=String(start.getFullYear());
+  document.querySelector('.mode-select').value=mode;
+  calendar.replaceChildren();
+  for(let n=0;n<7;n++){
+    const d=plus(start,n);
+    const key=dateKey(d);
+    const isToday=key===dateKey(anchor);
+    const day=document.createElement('div');
+    day.className='day'+(isToday?' current':'');
+    const date=document.createElement('div');
+    date.className='date';
+    const number=document.createElement('strong');
+    number.textContent=short(d);
+    const weekday=document.createElement('span');
+    weekday.textContent=weekdays[d.getDay()]+'曜日';
+    date.append(number,weekday);
+    if(isToday){
+      const mark=document.createElement('em');
+      mark.textContent='今日';
+      date.append(mark);
+    }
+    const items=document.createElement('div');
+    items.className='items';
+    const visible=(mode==='有料'||(mode==='お試し'&&week===0)
+      ?forecasts.filter(f=>f.date===key):[])
+      .concat(events.filter(e=>e.date===key));
+    visible.forEach(item=>items.append(entry(item)));
+    if(!visible.length){
+      const empty=document.createElement('span');
+      empty.className='empty';
+      empty.textContent=mode==='無料'||mode==='お試し'?'イベントはありません':'—';
+      items.append(empty);
+    }
+    day.append(date,items);
+    calendar.append(day);
+  }
+}
+document.querySelector('.mode-select').addEventListener('change',e=>{
+  mode=e.target.value;
+  week=0;
+  render();
+});
+document.querySelector('.year-select').addEventListener('change',e=>{
+  const targetYear=Number(e.target.value);
+  const yearStart=new Date(targetYear,0,1,12);
+  const diffDays=Math.round((yearStart-anchor)/86400000);
+  week=Math.ceil(diffDays/7);
+  render();
+});
+document.querySelector('[data-prev]').addEventListener('click',()=>{
+  week--;
+  render();
+});
+document.querySelector('[data-next]').addEventListener('click',()=>{
+  week++;
+  render();
+});
+document.querySelector('[data-today]').addEventListener('click',()=>{
+  week=0;
+  render();
+});
+document.querySelector('.close').addEventListener('click',close);
+document.querySelector('.scrim').addEventListener('click',close);
+phone.addEventListener('keydown',e=>{
+  if(e.key==='Escape')close();
+  if(!overlay.hidden&&e.key==='Tab'){
+    e.preventDefault();
+    document.querySelector('.close').focus();
+  }
+});
+let x=0,y=0;
+calendar.addEventListener('touchstart',e=>{
+  x=e.changedTouches[0].clientX;
+  y=e.changedTouches[0].clientY;
+},{passive:true});
+calendar.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-x;
+  const dy=e.changedTouches[0].clientY-y;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4){
+    week+=dx<0?1:-1;
+    render();
+  }
+},{passive:true});
+render();
+})();
+</script>
+</body>
+</html>
