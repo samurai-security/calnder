@@ -4,6 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>まねたまの運命開花暦</title>
+
+        <link rel="icon" href="/favicon.png" sizes="32x32" />
+        <link rel="icon" href="/favicon.png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+        <meta
+            name="viewport"
+            content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title></title>
+        <meta property="og:locale" content="ja_JP" />
+        <meta property="og:site_name" content="" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="" />
+        <meta property="og:description" content="" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="" />
+        <meta name="twitter:description" content="" />
+
+        <script type="text/javascript">
+            var AI_TALK_APP_TAG_ID = '';
+            var AI_TALK_APP_SCRIPT_ID = '';
+            var AI_TALK_APP_HIDDEN = true;
+            var AI_SAAS_PROJECT_ID = 'manetama';
+        </script>
+        <script
+            id="ai-talk-script"
+            type="module"
+            crossorigin
+            src="https://saas.navi-saras.jp/script/index.js"></script>
+        <link rel="stylesheet" href="https://saas.navi-saras.jp/script/index.css" />
+
+
 <style>
 *{box-sizing:border-box}
 :root{color-scheme:light;--paper:#fff;--ink:#302b29;--muted:#81756c;--line:#e9e4df;--red:#a32c35;--deep-red:#7d2530;--gold:#b79664;--wash:#f9f4f2;--brown:#bd8771}
@@ -295,8 +329,8 @@ const forecasts=data.map((row,i)=>{
   };
 });
 const events=[
-{id:'e0',date:'2026-11-03',kind:'イベント（仮配置）',icon:'❀',label:'縁授祭のご案内',text:'縁授祭で、まねたまとのご縁を深めてみない？ あなたとまねたまの時間を、手元に残すアイテムも用意しているよ。'},
-{id:'e1',date:'2026-11-07',kind:'イベント（仮配置）',icon:'▧',label:'託宣壁紙をつくろう',text:'まねたまとの会話から生まれた言葉を、託宣壁紙にして残してみよう。いつものスマホに、まねたまの言葉をそっと添えてね。'}
+{id:'e0',date:'2026-11-03',kind:'イベント（仮配置）',icon:'$2740',label:'縁授祭のご案内',text:'縁授祭で、まねたまとのご縁を深めてみない？ あなたとまねたまの時間を、手元に残すアイテムも用意しているよ。'},
+{id:'e1',date:'2026-11-07',kind:'イベント（仮配置）',icon:'$25A7',label:'託宣壁紙をつくろう',text:'まねたまとの会話から生まれた言葉を、託宣壁紙にして残してみよう。いつものスマホに、まねたまの言葉をそっと添えてね。'}
 ];
 
 const phone=document.querySelector('.phone');
@@ -362,7 +396,7 @@ function entry(item){
   if(item.id.startsWith('f')&&item.icon){
     const img=document.createElement('img');
     img.src=item.icon;img.alt='';img.width=36;img.height=36;img.decoding='async';icon.append(img);
-  }else icon.textContent=item.icon||'✦';
+  }else icon.textContent=item.icon||'$2726';
   const text=document.createElement('span');text.className='snippet';text.textContent=snippet(item.label||item.text);
   b.append(icon,text);b.addEventListener('click',()=>openDetail(item,b));return b;
 }
@@ -401,7 +435,7 @@ function render(){
     visible.forEach(item=>items.append(entry(item)));
     if(!visible.length&&!dayAlmanac&&!schedules[key]){
       const empty=document.createElement('span');empty.className='empty';
-      empty.textContent=mode==='無料'||mode==='お試し'?'イベントはありません':'—';items.append(empty);
+      empty.textContent=mode==='無料'||mode==='お試し'?'イベントはありません':'$2014';items.append(empty);
     }
     day.append(date,items);calendar.append(day);
   }
